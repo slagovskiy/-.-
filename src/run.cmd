@@ -1,0 +1,1 @@
+python manage.py runsslserver 0.0.0.0:443 --certificate d:\ssl\xn--c1adqboaecjl.xn--p1ai\domain-crt.txt --key d:\ssl\xn--c1adqboaecjl.xn--p1ai\domain-key.txt

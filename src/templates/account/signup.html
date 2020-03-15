@@ -1,0 +1,62 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-7 col-md-12 card">
+            <div class="card-body">
+
+                <h1>Регистрация</h1>
+
+                <p>Если Вы регистрировались ранее, то <a href="{{ login_url }}">войдите</a> в свою учетную запись. Так
+                    же Вы
+                    можете воспользоваться входом через социальные сети, при этом регистрация не требуется.</p>
+
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endfor %}
+
+                <form class="form-signin" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                    {% csrf_token %}
+                    <div class="form-label-group">
+                        <input type="text" name="username" placeholder="Имя пользователя" class="form-control"
+                               autofocus="autofocus" minlength="1" maxlength="150" required="" id="id_username"
+                               {% if form.username.value %}value="{{ form.username.value }}"{% endif %}
+                        >
+                        <label for="id_username">Имя пользователя</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="email" name="email" class="form-control"
+                               placeholder="Адрес электронной почты" id="id_email"
+                               {% if form.email.value %}value="{{ form.email.value }}"{% endif %}
+                        >
+                        <label for="id_email">Адрес электронной почты</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="password" name="password1" class="form-control"
+                               placeholder="Пароль" required="" id="id_password1">
+                        <label for="id_password1">Пароль</label>
+                    </div>
+                    <div class="form-label-group">
+                        <input type="password" name="password2" class="form-control"
+                               placeholder="Пароль (еще раз)" required="" id="id_password2">
+                        <label for="id_password2">Пароль (еще раз)</label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+                    {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

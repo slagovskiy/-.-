@@ -1,0 +1,9 @@
+Django
+django-extensions
+djangorestframework
+djangorestframework-jwt
+django-allauth
+PyJWT
+pillow
+gunicorn
+django-sslserver

@@ -1,0 +1,48 @@
+{% load static %}
+<div class="col-lg-5 col-md-12 card">
+    <div class="card-body">
+        <form class="form-signin" method="POST" action="/accounts/login/">
+            {% csrf_token %}
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-3 font-weight-normal"></h1>
+            </div>
+
+            <div class="form-label-group">
+                <input type="text" id="inputUsername" name="login" class="form-control" placeholder="Имя пользователя"
+                       required=""
+                       autofocus="">
+                <label for="inputUsername">Имя пользователя</label>
+            </div>
+
+            <div class="form-label-group">
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Пароль"
+                       required="">
+                <label for="inputPassword">Пароль</label>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+        </form>
+        <p class="text-center text-muted">Нет профиля на опрослегко.рф</p>
+        <p class="text-center">
+            <button class="btn btn-lg btn-light btn-block" type="">Регистрация</button>
+        </p>
+        {% load account socialaccount %}
+        {% providers_media_js %}
+        <p class="text-center">
+            <a class="btn-icon"
+               href="javascript:allauth.facebook.login%28%27%27%2C%20%27authenticate%27%2C%20%27login%27%2C%20%27%27%29"
+               title="Войти с помощью facebook"><img
+                    src="{% static 'icons/iconfinder_square-facebook_317727.png' %}" width="48" height="48"></a>
+            <a class="btn-icon" href="/accounts/vk/login/?process=login" title="Войти с помощью vk"><img
+                    src="{% static 'icons/iconfinder_11_939748.png' %}" width="48" height="48"></a>
+            <a class="btn-icon" href="/accounts/google/login/?process=login" title="Войти с помощью google"><img
+                    src="{% static 'icons/iconfinder_Google_1298745.png' %}" width="48" height="48"></a>
+            <a class="btn-icon" href="/accounts/odnoklassniki/login/?process=login"
+               title="Войти с помощью ok"><img src="{% static 'icons/iconfinder_18_939741.png' %}"
+                                               width="48" height="48"></a>
+            <a class="btn-icon" href="/accounts/mailru/login/?process=login"
+               title="Войти с помощью mail.ru"><img src="{% static 'icons/iconfinder_mailru_386659.png' %}"
+                                                    width="48" height="48"></a>
+        </p>
+    </div>
+</div>

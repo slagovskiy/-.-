@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block jumbotron %}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<section class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-12">
+                <h1 class="display-3 text-dark font-weight-bold baner-title">Проводите опросы легко!</h1>
+                <p>This is a template for a simple marketing or informational website. It includes a large callout
+                    called a
+                    jumbotron and three supporting pieces of content. Use it as a starting point to create something
+                    more
+                    unique.</p>
+            </div>
+            {% include 'form_login.html' %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h2 class="baner-title">Шаг 1</h2>
+        <p>Войдите на сайт <a href="https://опрослегко.рф">опрослегко.рф</a>, используя зарегистрированную учетную
+            запись или воспользуйтесь входом через социальную сеть.</p>
+    </div>
+    <div class="col-md-4">
+        <h2 class="baner-title">Шаг 2</h2>
+        <p>Создайте опрос из одного или нескольких вопросов, укажите варианты ответов. Разошлите ссылку на опрос,
+            используя кнопки социальных сетей.</p>
+    </div>
+    <div class="col-md-4">
+        <h2 class="baner-title">Шаг 3</h2>
+        <p>Подведите итоги опроса, если необходимо, то поделитесь результатами.</p>
+    </div>
+</div>
+{% endblock %}

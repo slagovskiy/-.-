@@ -1,0 +1,131 @@
+{% load static %}
+{% load i18n %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Sergey Lagovskiy">
+    <title>{% block head_title %}{% endblock %}Создавайте опросы легко!</title>
+    {% block extra_head %}
+    {% endblock %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Roboto|Ubuntu|Gabriela&display=swap" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'favicon/apple-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicon/apple-icon-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicon/apple-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'favicon/apple-icon-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'favicon/apple-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'favicon/apple-icon-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicon/apple-icon-144x144.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicon/apple-icon-152x152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-icon-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/manifest.json' %}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{% static 'favicon/ms-icon-144x144.png' %}">
+    <meta name="theme-color" content="#ffffff">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'bootstrap/theme.css' %}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><img src="{% static 'img/logo1.png' %}"> ОпросЛегко.рф</a>
+        <div class="text-right">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                    {% comment %}
+                    <li class="nav-item">
+                        <a href="{% url 'account_email' %}" class="nav-link">Change E-mail</a>
+                    </li>
+                    {% endcomment %}
+                    <li class="nav-item">
+                        <a href="/accounts/profile/" class="nav-link">
+                            <i class="far fa-user-circle"></i> {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'account_logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'account_login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'account_signup' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Зарегистрироваться</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% block jumbotron %}
+{% endblock %}
+
+
+<main role="main" class="main">
+    <div class="container content">
+        {% if messages %}
+        <div class="row">
+            <div class="col-sm-12">
+                {% for message in messages %}
+                <div class="alert alert-primary" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block extra_body %}
+    {% endblock %}
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; ОпросЛегко.рф 2020</p>
+    </div>
+</footer>
+<script src="{% static 'jquery/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>
