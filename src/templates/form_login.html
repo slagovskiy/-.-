@@ -1,6 +1,7 @@
 {% load static %}
 <div class="col-lg-5 col-md-12 card">
     <div class="card-body">
+        {% if not user.is_authenticated %}
         <form class="form-signin" method="POST" action="/accounts/login/">
             {% csrf_token %}
             <div class="text-center mb-4">
@@ -24,7 +25,7 @@
         </form>
         <p class="text-center text-muted">Нет профиля на опрослегко.рф</p>
         <p class="text-center">
-            <button class="btn btn-lg btn-light btn-block" type="">Регистрация</button>
+            <a href="{% url 'account_signup' %}" class="btn btn-lg btn-light btn-block">Регистрация</a>
         </p>
         {% load account socialaccount %}
         {% providers_media_js %}
@@ -44,5 +45,11 @@
                title="Войти с помощью mail.ru"><img src="{% static 'icons/iconfinder_mailru_386659.png' %}"
                                                     width="48" height="48"></a>
         </p>
+        {% else %}
+        <p class="text-center">
+            <h2 class="text-center">Приветствуем, {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}!</h2>
+            <a href="{% url 'account_signup' %}" class="btn btn-lg btn-primary btn-block">Создать опрос</a>
+        </p>
+        {% endif %}
     </div>
 </div>

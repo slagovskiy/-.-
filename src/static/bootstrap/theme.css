@@ -144,3 +144,13 @@ footer {
     padding-top: 2em;
     padding-bottom: 2em;
 }
+
+.list-group-hover .list-group-item:hover {
+    color: #ffffff;
+    background-color: #007bff;
+    cursor: pointer;
+}
+
+.text-small {
+    font-size: small;
+}

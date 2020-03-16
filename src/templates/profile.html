@@ -28,7 +28,18 @@
         </div>
     </div>
     <div class="col-sm-12 mt-4">
+        {% if not pools %}
         Нет сохраненных опросов.
+        {% else %}
+        <ul class="list-group list-group-hover">
+            {% for pool in pools %}
+            <li class="list-group-item">
+                {{ pool.title }}<br>
+                <span class="text-small">Опрос создан: {{ pool.date_created }}, Опрошено: 0</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

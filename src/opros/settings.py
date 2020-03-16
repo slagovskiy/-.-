@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     # 'opros.userext',
+    'opros.pools'
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,8 @@ if not SECRET_KEY:
 # Provider specific settings
 
 # allauth
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
