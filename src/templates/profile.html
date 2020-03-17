@@ -5,7 +5,7 @@
     <div class="col-sm-12">
         <div class="form-inline">
             <div class="form-group mr-2">
-                <button class="btn btn-warning form-control">Создать новый опрос</button>
+                <a href="{% url 'pool_edit' %}" class="btn btn-warning form-control">Создать новый опрос</a>
             </div>
             <form method="POST" action="" id="from-change-name" style="display: none;">
                 {% csrf_token %}

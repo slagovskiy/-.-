@@ -22,3 +22,25 @@ def profile(request):
             return redirect('/accounts/profile/')
 
 
+def pool_edit(request):
+    if request.user.is_anonymous:
+        return redirect('/')
+    pool = ''
+    # pool = Pool.objects.all().filter(user=request.user)
+    if request.method == 'GET':
+        content = {
+            'pool': pool
+        }
+        return render(request, 'pool_edit.html', content)
+    elif request.method == 'POST':
+        pass
+        '''
+        if 'username' in request.POST:
+            request.user.first_name = request.POST.get('username', '')
+            user = User.objects.get(id=request.user.id)
+            user.first_name = request.POST.get('username', '')
+            user.save()
+            return redirect('/accounts/profile/')
+        '''
+
+
