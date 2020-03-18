@@ -7,8 +7,123 @@
     <div class="col-sm-12">
         {% verbatim %}
         <div id="app">
-            <input v-model="message">
-            <p>{{ message }}</p>
+            <form>
+                <div class="form-group">
+                    <label for="pool_title">Наименование опроса</label>
+                    <input type="text" class="form-control" v-model="pool.title" id="pool_title">
+                </div>
+                <div class="form-group">
+                    <a href="#" v-on:click.prevent="pool_adv=!pool_adv;">Дополнительные параметры</a>
+                </div>
+                <div v-show="pool_adv">
+                    <div class="form-group">
+                        <label for="pool_password">Пароль для доступа к опросу</label>
+                        <input type="text" class="form-control" v-model="pool.password" id="pool_password">
+                        <small class="form-text text-muted">Если оставить пустым, то пароль не будет запрашиваться и
+                            доступ будет для всех.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="pool_limit">Ограничение на количество опрошенных</label>
+                        <input type="text" class="form-control" v-model="pool.limit" id="pool_limit">
+                        <small class="form-text text-muted">Если указать 0, то не будет ограничения на количество
+                            опрашиваемых.</small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="pool_comments" v-model="pool.comments">
+                        <label class="form-check-label" for="pool_comments">Разрешить комментраии.</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="question in pool.questions" v-bind:key="question.uuid">
+                            <div class="form-group">
+                                <div v-if="question.deleted">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Вопрос:</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Вопрос..."
+                                               aria-label="Вопрос..." v-model="question.title"
+                                               style="text-decoration: line-through;" readonly="readonly">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="question.deleted=false;">Восстановить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Вопрос:</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Вопрос..."
+                                               aria-label="Вопрос..." v-model="question.title">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    v-on:click="question.deleted=true;">Удалить
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item" v-for="answer in question.answers"
+                                            v-bind:key="answer.uuid">
+                                            <div class="form-group">
+                                                <div v-if="answer.deleted">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Ответ:</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Ответ..."
+                                                               aria-label="Ответ..." v-model="answer.title"
+                                                               style="text-decoration: line-through;"
+                                                               readonly="readonly">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="button"
+                                                                    v-on:click="answer.deleted=false;">Восстановить
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Ответ:</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Ответ..."
+                                                               aria-label="Ответ..." v-model="answer.title">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="button"
+                                                                    v-on:click="answer.deleted=true;">Удалить
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <button class="btn btn-warning"
+                                                    v-on:click.prevent="question.answers.push(Object.assign({}, answer))">
+                                                Добавить вариант ответа
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <button class="btn btn-success"
+                                    v-on:click.prevent="pool.questions.push(Object.assign({}, question))">Добавить
+                                вопрос
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group form-actions">
+                    <button class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
         </div>
         {% endverbatim %}
     </div>
@@ -16,7 +131,82 @@
         var app = new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!'
+                pool_adv: false,
+                answer: {
+                    uuid: '',
+                    title: '',
+                    link: '',
+                    deleted: false
+                },
+                question: {
+                    uuid: '',
+                    title: '',
+                    order: 0,
+                    deleted: false,
+                    answers: [
+                        {
+                            uuid: '',
+                            title: 'Ответ 1',
+                            link: '',
+                            deleted: false
+                        },
+                        {
+                            uuid: '',
+                            title: 'Ответ 2',
+                            link: '',
+                            deleted: false
+                        },
+                    ]
+                },
+                pool: {
+                    uuid: '',
+                    title: 'Опрос',
+                    password: '',
+                    limit: 0,
+                    comments: true,
+                    questions: [
+                        {
+                            uuid: '',
+                            title: 'Вопрос 1',
+                            order: 0,
+                            deleted: false,
+                            answers: [
+                                {
+                                    uuid: '',
+                                    title: 'Ответ 1',
+                                    link: '',
+                                    deleted: false
+                                },
+                                {
+                                    uuid: '',
+                                    title: 'Ответ 2',
+                                    link: '',
+                                    deleted: false
+                                },
+                            ]
+                        },
+                        {
+                            uuid: '',
+                            title: 'Вопрос 2',
+                            order: 0,
+                            deleted: false,
+                            answers: [
+                                {
+                                    uuid: '',
+                                    title: 'Ответ 1',
+                                    link: '',
+                                    deleted: false
+                                },
+                                {
+                                    uuid: '',
+                                    title: 'Ответ 2',
+                                    link: '',
+                                    deleted: false
+                                },
+                            ]
+                        },
+                    ]
+                }
             }
         })
     </script>

@@ -146,8 +146,7 @@ footer {
 }
 
 .list-group-hover .list-group-item:hover {
-    color: #ffffff;
-    background-color: #007bff;
+    background-color: #DDDDDD;
     cursor: pointer;
 }
 
