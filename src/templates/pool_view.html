@@ -4,10 +4,11 @@
 {% block extra_head %}
 {% if pool %}
 <meta property="og:url" content="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"/>
-<meta property="og:type" content="website"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="ОпросЛегко.рф"/>
 <meta property="og:title" content="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"/>
 <meta property="og:description" content="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"/>
-<meta property="og:image" content="https://опрослегко.рф{% static 'img/logo1.png' %}"/>
+<meta property="og:image" content="https://опрослегко.рф{% static 'img/logo0.png' %}"/>
 {% endif %}
 {% endblock %}
 
