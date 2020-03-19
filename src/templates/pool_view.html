@@ -5,7 +5,7 @@
 {% if pool %}
 <meta property="og:url" content="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"/>
 <meta property="og:type" content="website"/>
-<meta property="og:title" content="Опрос: {{ pool.title }}"/>
+<meta property="og:title" content="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"/>
 <meta property="og:description" content="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"/>
 <meta property="og:image" content="https://опрослегко.рф{% static 'img/logo1.png' %}"/>
 {% endif %}
