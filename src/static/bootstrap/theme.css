@@ -153,3 +153,16 @@ footer {
 .text-small {
     font-size: small;
 }
+
+.text-great {
+    font-size: medium;
+}
+
+.text-pool {
+    font-size: 1.7em;
+    padding-bottom: 0.5em;
+}
+
+.text-question {
+    font-size: 1.5em;
+}

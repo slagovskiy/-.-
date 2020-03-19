@@ -46,7 +46,7 @@
                                                aria-label="Вопрос..." v-model="question.title"
                                                style="text-decoration: line-through;" readonly="readonly">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
+                                            <button class="btn btn-outline-success" type="button"
                                                     v-on:click="question.deleted=false;">Восстановить
                                             </button>
                                         </div>
@@ -57,10 +57,10 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Вопрос:</span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Вопрос..."
-                                               aria-label="Вопрос..." v-model="question.title">
+                                        <input type="text" class="form-control" placeholder="Введите вопрос..."
+                                               aria-label="Введите вопрос..." v-model="question.title">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button"
+                                            <button class="btn btn-outline-danger" type="button"
                                                     v-on:click="question.deleted=true;">Удалить
                                             </button>
                                         </div>
@@ -75,12 +75,14 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Ответ:</span>
                                                         </div>
-                                                        <input type="text" class="form-control" placeholder="Ответ..."
-                                                               aria-label="Ответ..." v-model="answer.title"
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Введите вариант выбора..."
+                                                               aria-label="Введите вариант выбора..."
+                                                               v-model="answer.title"
                                                                style="text-decoration: line-through;"
                                                                readonly="readonly">
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" type="button"
+                                                            <button class="btn btn-outline-success" type="button"
                                                                     v-on:click="answer.deleted=false;">Восстановить
                                                             </button>
                                                         </div>
@@ -91,19 +93,36 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Ответ:</span>
                                                         </div>
-                                                        <input type="text" class="form-control" placeholder="Ответ..."
-                                                               aria-label="Ответ..." v-model="answer.title">
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Введите вариант выбора..."
+                                                               aria-label="Введите вариант выбора..."
+                                                               v-model="answer.title">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-secondary" type="button"
+                                                                    v-on:click="answer.show_link=true;"
+                                                                    v-if="!answer.show_link">
+                                                                Добавить ссылку
+                                                            </button>
+                                                            <button class="btn btn-outline-danger" type="button"
                                                                     v-on:click="answer.deleted=true;">Удалить
                                                             </button>
                                                         </div>
+                                                    </div>
+                                                    <div class="input-group mb-3" v-if="answer.show_link">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Ссылка:</span>
+                                                        </div>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Введите адрес ссылки..."
+                                                               aria-label="Введите адрес ссылки..."
+                                                               v-model="answer.link"
+                                                        >
                                                     </div>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item">
-                                            <button class="btn btn-warning"
+                                            <button class="btn btn-secondary"
                                                     v-on:click.prevent="question.answers.push(Object.assign({}, answer))">
                                                 Добавить вариант ответа
                                             </button>
@@ -113,7 +132,7 @@
                             </div>
                         </li>
                         <li class="list-group-item">
-                            <button class="btn btn-success"
+                            <button class="btn btn-secondary"
                                     v-on:click.prevent="pool.questions.push(Object.assign({}, question))">Добавить
                                 вопрос
                             </button>
@@ -136,6 +155,7 @@
                     uuid: '',
                     title: '',
                     link: '',
+                    show_link: false,
                     deleted: false
                 },
                 question: {
@@ -146,67 +166,82 @@
                     answers: [
                         {
                             uuid: '',
-                            title: 'Ответ 1',
+                            title: '',
                             link: '',
+                            show_link: false,
                             deleted: false
                         },
                         {
                             uuid: '',
-                            title: 'Ответ 2',
+                            title: '',
                             link: '',
+                            show_link: false,
                             deleted: false
                         },
                     ]
                 },
+        {% if pool %}
+                pool: {
+                    uuid: '{{ pool.uuid }}',
+                    title: '{{ pool.title }}',
+                    password: '{{ pool.password }}',
+                    limit: {{ pool.limit }},
+                    comments: {% if pool.comments %}true{% else %}false{% endif %},
+                    questions: [
+                        {% for question in pool.question_set.all %}
+                        {
+                            uuid: '{{ question.uuid }}',
+                            title: '{{ question.title }}',
+                            order: {{ question.order }},
+                            deleted: {% if question.deleted %}true{% else %}false{% endif %},
+                            answers: [
+                                {% for answer in question.answer_set.all %}
+                                {
+                                    uuid: '{{ answer.uuid }}',
+                                    title: '{{ answer.title }}',
+                                    link: '{{ answer.link }}',
+                                    show_link: {% if answer.link %}true{% else %}false{% endif %},
+                                    deleted:  {% if answer.deleted %}true{% else %}false{% endif %},
+                                },
+                                {% endfor %}
+                            ]
+                        },
+                        {% endfor %}
+                    ]
+                }
+        {% else %}
                 pool: {
                     uuid: '',
-                    title: 'Опрос',
+                    title: '',
                     password: '',
                     limit: 0,
                     comments: true,
                     questions: [
                         {
                             uuid: '',
-                            title: 'Вопрос 1',
+                            title: '',
                             order: 0,
                             deleted: false,
                             answers: [
                                 {
                                     uuid: '',
-                                    title: 'Ответ 1',
+                                    title: '',
                                     link: '',
+                                    show_link: false,
                                     deleted: false
                                 },
                                 {
                                     uuid: '',
-                                    title: 'Ответ 2',
+                                    title: '',
                                     link: '',
-                                    deleted: false
-                                },
-                            ]
-                        },
-                        {
-                            uuid: '',
-                            title: 'Вопрос 2',
-                            order: 0,
-                            deleted: false,
-                            answers: [
-                                {
-                                    uuid: '',
-                                    title: 'Ответ 1',
-                                    link: '',
-                                    deleted: false
-                                },
-                                {
-                                    uuid: '',
-                                    title: 'Ответ 2',
-                                    link: '',
+                                    show_link: false,
                                     deleted: false
                                 },
                             ]
                         },
                     ]
                 }
+        {% endif %}
             }
         })
     </script>

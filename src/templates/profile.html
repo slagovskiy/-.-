@@ -1,11 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
+<script src="{% static 'clipboard/clipboard.min.js' %}"></script>
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div class="row">
     <div class="col-sm-12">
         <div class="form-inline">
             <div class="form-group mr-2">
-                <a href="{% url 'pool_edit' %}" class="btn btn-warning form-control">Создать новый опрос</a>
+                <a href="{% url 'pool_edit' uuid=0 %}" class="btn btn-warning form-control">Создать новый опрос</a>
             </div>
             <form method="POST" action="" id="from-change-name" style="display: none;">
                 {% csrf_token %}
@@ -38,18 +49,25 @@
             <li class="list-group-item">
                 {{ pool.title }}<br>
                 <span class="text-small">Опрос создан: {{ pool.date_created }}, Опрошено: 0</span><br><br>
-                <div>
-                    <a href="#" class="btn btn-primary">Редактировать</a>
-                    <a href="#" class="btn btn-warning">Просмотр</a>
-                    <a id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Поделиться
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a class="dropdown-item" href="#">Facebook</a>
-                        <a class="dropdown-item" href="#">VK</a>
-                        <a class="dropdown-item" href="#">OK</a>
-                        <a class="dropdown-item" href="#">Скопировать ссылку</a>
+                <div class="btn-toolbar" role="toolbar">
+                    <a href="{% url 'pool_edit' uuid=pool.uuid %}"
+                       class="btn btn-secondary mr-1 mb-1">Редактировать</a>
+                    <a href="{% url 'pool_view' uuid=pool.uuid %}" class="btn btn-secondary mr-1 mb-1">Просмотр</a>
+                    <div class="input-group mr-1 mb-1">
+                        <input type="text" class="form-control"
+                               value="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary btn-clipboard"
+                                    data-clipboard-text="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"
+                                    title="Скопировать в буфер обмена"
+                            >
+                                <i class="far fa-clipboard"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="fb-share-button"
+                         data-href="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"
+                         data-layout="box_count">
                     </div>
                 </div>
             </li>
@@ -58,4 +76,7 @@
         {% endif %}
     </div>
 </div>
+<script>
+    new ClipboardJS('.btn-clipboard');
+</script>
 {% endblock %}
