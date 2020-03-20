@@ -3,15 +3,8 @@
 
 {% block content %}
 <script src="{% static 'clipboard/clipboard.min.js' %}"></script>
-<div id="fb-root"></div>
-<script>(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+<script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+<script src="https://yastatic.net/share2/share.js"></script>
 <div class="row">
     <div class="col-sm-12">
         <div class="form-inline">
@@ -65,9 +58,17 @@
                             </button>
                         </div>
                     </div>
-                    <div class="fb-share-button"
-                         data-href="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"
-                         data-layout="box_count">
+                    <div class="input-group" style="margin-top: auto;margin-bottom: auto;">
+                        <div
+                                class="ya-share2"
+                                data-services="vkontakte,facebook,odnoklassniki,moimir,twitter,linkedin,viber,whatsapp,telegram"
+                                data-title="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"
+                                data-description="Проводите опросы легко на ОпросЛегко.рф"
+                                data-url="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"
+                                data-hashtags="#опрос, #опрослегко, #pool, #опросслегкорф"
+                                data-image="https://опрослегко.рф{% static 'img/logo0.png' %}"
+                                data-size="m"
+                        ></div>
                     </div>
                 </div>
             </li>
