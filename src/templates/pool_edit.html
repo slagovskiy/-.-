@@ -140,7 +140,7 @@
                     </ul>
                 </div>
                 <div class="form-group form-actions">
-                    <button class="btn btn-primary">Сохранить</button>
+                    <button class="btn btn-primary" v-bind:disabled="!saveEnabled" v-on:click.prevent="savePoll">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -149,7 +149,26 @@
     <script>
         var app = new Vue({
             el: '#app',
+            methods: {
+                savePoll() {
+                    this.saveEnabled = false;
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% if pool %}{% url 'pool_edit' uuid=pool.uuid %}{% else %}{% url 'pool_edit' uuid=0 %}{% endif %}',
+                        data: {'pool': this.pool},
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function(response) {
+                            console.log(response);
+                        }
+                    });
+                    this.saveEnabled = true;
+                },
+            },
             data: {
+                saveEnabled: true,
                 pool_adv: false,
                 answer: {
                     uuid: '',
@@ -181,68 +200,69 @@
                     ]
                 },
         {% if pool %}
-                pool: {
-                    uuid: '{{ pool.uuid }}',
-                    title: '{{ pool.title }}',
-                    password: '{{ pool.password }}',
-                    limit: {{ pool.limit }},
-                    comments: {% if pool.comments %}true{% else %}false{% endif %},
-                    questions: [
-                        {% for question in pool.question_set.all %}
-                        {
-                            uuid: '{{ question.uuid }}',
-                            title: '{{ question.title }}',
-                            order: {{ question.order }},
-                            deleted: {% if question.deleted %}true{% else %}false{% endif %},
-                            answers: [
-                                {% for answer in question.answer_set.all %}
-                                {
-                                    uuid: '{{ answer.uuid }}',
-                                    title: '{{ answer.title }}',
-                                    link: '{{ answer.link }}',
-                                    show_link: {% if answer.link %}true{% else %}false{% endif %},
-                                    deleted:  {% if answer.deleted %}true{% else %}false{% endif %},
-                                },
-                                {% endfor %}
-                            ]
-                        },
-                        {% endfor %}
-                    ]
-                }
+        pool: {
+            uuid: '{{ pool.uuid }}',
+                title: '{{ pool.title }}',
+                password: '{{ pool.password }}',
+                limit: {{ pool.limit }},
+            comments: {% if pool.comments %}true{% else %}false{% endif %},
+            questions: [
+                {% for question in pool.question_set.all %}
+            {
+                uuid: '{{ question.uuid }}',
+                title: '{{ question.title }}',
+                order: {{ question.order }},
+                deleted: {% if question.deleted %}true{% else %}false{% endif %},
+                answers: [
+                    {% for answer in question.answer_set.all %}
+                {
+                    uuid: '{{ answer.uuid }}',
+                    title: '{{ answer.title }}',
+                    link: '{{ answer.link }}',
+                    show_link: {% if answer.link %}true{% else %}false{% endif %},
+                    deleted:  {% if answer.deleted %}true{% else %}false{% endif %},
+                },
+                {% endfor %}
+            ]
+            },
+            {% endfor %}
+        ]
+        }
         {% else %}
-                pool: {
+        pool: {
+            uuid: '',
+            title:'',
+            password: '',
+            limit: 0,
+            comments: true,
+            questions:
+            [
+                {
                     uuid: '',
                     title: '',
-                    password: '',
-                    limit: 0,
-                    comments: true,
-                    questions: [
+                    order: 0,
+                    deleted: false,
+                    answers: [
                         {
                             uuid: '',
                             title: '',
-                            order: 0,
-                            deleted: false,
-                            answers: [
-                                {
-                                    uuid: '',
-                                    title: '',
-                                    link: '',
-                                    show_link: false,
-                                    deleted: false
-                                },
-                                {
-                                    uuid: '',
-                                    title: '',
-                                    link: '',
-                                    show_link: false,
-                                    deleted: false
-                                },
-                            ]
+                            link: '',
+                            show_link: false,
+                            deleted: false
+                        },
+                        {
+                            uuid: '',
+                            title: '',
+                            link: '',
+                            show_link: false,
+                            deleted: false
                         },
                     ]
-                }
+                },
+            ]
+        }
         {% endif %}
-            }
+        }
         })
     </script>
 </div>

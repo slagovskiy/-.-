@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .pools.models import Pool
 
@@ -24,6 +25,7 @@ def profile(request):
             return redirect('/accounts/profile/')
 
 
+@csrf_exempt
 def pool_edit(request, uuid):
     if request.user.is_anonymous:
         return redirect('/')
@@ -38,7 +40,9 @@ def pool_edit(request, uuid):
         }
         return render(request, 'pool_edit.html', content)
     elif request.method == 'POST':
-        pass
+        data = request.POST
+        print (data)
+        return JsonResponse({ 'data': 'ok' })
         '''
         if 'username' in request.POST:
             request.user.first_name = request.POST.get('username', '')
