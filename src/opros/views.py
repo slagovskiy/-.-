@@ -161,7 +161,7 @@ def pool_view(request, uuid):
         for q in pool.question_set.all().filter(deleted=False):
             ua.append(UserAnswer.objects.all().filter(
                 question=q,
-                useragent=request.META['HTTP_USER_AGENT'] + ' ' + request.META['REMOTE_HOST'],
+                useragent=request.META['HTTP_USER_AGENT'],
                 ipaddress=request.META['REMOTE_ADDR']
             ).last())
     if request.method == 'GET':
@@ -177,7 +177,7 @@ def pool_view(request, uuid):
                 ua = UserAnswer.objects.all().filter(
                     question = Question.objects.get(uuid=k),
                     #answer = Answer.objects.get(uuid=v),
-                    useragent = request.META['HTTP_USER_AGENT'] + ' ' + request.META['REMOTE_HOST'],
+                    useragent = request.META['HTTP_USER_AGENT'],
                     ipaddress = request.META['REMOTE_ADDR']
                 ).last()
                 if ua:
@@ -187,7 +187,7 @@ def pool_view(request, uuid):
                     ua = UserAnswer.objects.create(
                         question=Question.objects.get(uuid=k),
                         answer=Answer.objects.get(uuid=v),
-                        useragent=request.META['HTTP_USER_AGENT'] + ' ' + request.META['REMOTE_HOST'],
+                        useragent=request.META['HTTP_USER_AGENT'],
                         ipaddress=request.META['REMOTE_ADDR']
                     )
                     ua.save()
