@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^pool/(?P<uuid>[-\w]+)/edit/$', pool_edit, name='pool_edit'),
     url(r'^pool/(?P<uuid>[-\w]+)/view/$', pool_view, name='pool_view'),
     url(r'^pool/(?P<uuid>[-\w]+)/stat/$', pool_stat, name='pool_stat'),
+    url(r'^pool/(?P<uuid>[-\w]+)/$', pool_stat, name='pool_info'),
     path('admin/', admin.site.urls),
 ]
