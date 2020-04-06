@@ -140,7 +140,11 @@
                     </ul>
                 </div>
                 <div class="form-group form-actions">
-                    <button class="btn btn-primary" v-bind:disabled="!saveEnabled" v-on:click.prevent="savePoll">Сохранить</button>
+
+                    <button class="btn btn-primary" v-bind:disabled="!saveEnabled" v-on:click.prevent="savePoll">
+                        <span class="spinner-border spinner-border-sm" v-if="!saveEnabled" role="status" aria-hidden="true"></span>
+                        Сохранить
+                    </button>
                 </div>
             </form>
         </div>
@@ -155,16 +159,16 @@
                     $.ajax({
                         type: 'POST',
                         url: '{% if pool %}{% url 'pool_edit' uuid=pool.uuid %}{% else %}{% url 'pool_edit' uuid=0 %}{% endif %}',
-                        data: {'pool': this.pool},
-                        dataType: 'json',
+                        data: {'pool': JSON.stringify(this.pool)},
+                        dataType: "json",
                         success: function (response) {
-                            console.log(response);
+                            location.href = '{% url 'account_profile' %}';
                         },
                         error: function(response) {
                             console.log(response);
                         }
                     });
-                    this.saveEnabled = true;
+                    //this.saveEnabled = true;
                 },
             },
             data: {

@@ -28,12 +28,21 @@
                 <li class="list-group-item">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="{{ question.uuid }}"
-                               id="radio-{{ answer.uuid }}" value="{{ answer.uuid }}">
+                               id="radio-{{ answer.uuid }}" value="{{ answer.uuid }}"
+                                {% for u in ua %}
+                                    {% ifequal u.question.uuid question.uuid %}
+                                        {% ifequal u.answer.uuid answer.uuid %}
+                                            checked="checked"
+                                        {% endifequal %}
+                                    {% endifequal %}
+                                {% endfor %}
+                        >
                         <label class="form-check-label" for="radio-{{ answer.uuid }}">
-                            {{ answer.title }}<br>
+                            {{ answer.title }}
                             {% if answer.link %}
-                            <span class="text-small"><a href="{{ answer.link }}"
-                                                        target="_blank">{{ answer.link }}</a></span>
+                            <span class="text-small">
+                                <a href="{{ answer.link }}" target="_blank" title="{{ answer.link }}">[ссылка]</a>
+                            </span>
                             {% endif %}
                         </label>
                 </li>
@@ -43,7 +52,62 @@
         </li>
         {% endif %}
         {% endfor %}
+        <li class="list-group-item">
+            <button class="btn btn-primary" onclick="checkForm()" id="btnSave">
+                <span class="spinner-border spinner-border-sm" id="btnSaveSpin"
+                      role="status" aria-hidden="true" style="display: none;"
+                ></span>
+                Сохранить
+            </button>
+            <span class="alert alert-danger" role="alert" style="display: none;" id="alertForm">
+                Вы не ответили на все вопросы!
+            </span>
+        </li>
     </ul>
+    <script>
+        function checkForm() {
+            q = {};
+            a = {};
+            ok = false;
+            {% for question in pool.question_set.all %}
+                {% if not question.deleted %}
+                    q['{{ question.uuid }}'] = false;
+                    {% for answer in question.answer_set.all %}
+                        {% if not answer.deleted %}
+                            if ($('#radio-{{ answer.uuid}}').prop("checked")) {
+                                q['{{ question.uuid }}'] = true;
+                                a['{{ question.uuid }}'] = '{{ answer.uuid}}';
+                            }
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            ok = true{% for question in pool.question_set.all %}{% if not question.deleted %} & q['{{ question.uuid }}']{% endif %}{% endfor %};
+            if (!ok) {
+                $('#alertForm').show();
+            } else {
+                $('#alertForm').hide();
+                $('#btnSave').prop('disabled', 'disabled');
+                $('#btnSaveSpin').show();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% if pool %}{% url 'pool_view' uuid=pool.uuid %}{% endif %}',
+                    data: {'answer': JSON.stringify(a)},
+                    dataType: "json",
+                    success: function (response) {
+                        location.href = '{% url 'pool_stat' uuid=pool.uuid %}';
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            }
+            console.log(a)
+            return false;
+
+        }
+    </script>
+
     {% else %}
     <div class="col-sm-12">Опрос не найден или автор его удалил.</div>
     {% endif %}

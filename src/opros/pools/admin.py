@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pool, Question, Answer
+from .models import Pool, Question, Answer, UserAnswer
 
 
 class PoolAdmin(admin.ModelAdmin):
@@ -17,6 +17,11 @@ class AnswerAdmin(admin.ModelAdmin):
     list_filter = ('question',)
 
 
+class UserAnswerAdmin(admin.ModelAdmin):
+    list_display = ('date_created', 'answer')
+
+
 admin.site.register(Pool, PoolAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
+admin.site.register(UserAnswer, UserAnswerAdmin)

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{% if pool %}
+<meta property="og:url" content="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}"/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="ОпросЛегко.рф"/>
+<meta property="og:title" content="{{ pool.user.first_name }} приглашает Вас пройти опрос: {{ pool.title }}"/>
+<meta property="og:description" content="Проводите опросы легко на ОпросЛегко.рф"/>
+<meta property="og:image" content="https://опрослегко.рф{% static 'img/logo0.png' %}"/>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% if pool %}
+    <div class="col-sm-12 text-pool">{{ pool.title }}</div>
+    <ul class="list-group col-sm-12">
+        {% for question in pool.question_set.all %}
+        {% if not question.deleted %}
+        <li class="list-group-item">
+            <div class="text-question">{{ question.title }}</div>
+            <ul class="list-group">
+                {% for answer in question.answer_set.all %}
+                {% if not answer.deleted %}
+                <li class="list-group-item">
+                    <label class="form-check-label">
+                        {{ answer.title }}
+                        {% if answer.link %}
+                        <span class="text-small">
+                            <a href="{{ answer.link }}" target="_blank" title="{{ answer.link }}">[ссылка]</a>
+                        </span>
+                        {% endif %}
+                    </label>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped"
+                             role="progressbar" style="width: {{ answer.ua_persent }}%" aria-valuenow="{{ answer.ua_persent }}"
+                             aria-valuemin="0" aria-valuemax="100"
+                        >{{ answer.ua_persent }}% [{{ answer.ua_count }} из {{ question.total_count }}]</div>
+                    </div>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="col-sm-12">Опрос не найден или автор его удалил.</div>
+    {% endif %}
+</div>
+{% endblock %}

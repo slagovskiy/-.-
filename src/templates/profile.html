@@ -41,11 +41,12 @@
             {% for pool in pools %}
             <li class="list-group-item">
                 {{ pool.title }}<br>
-                <span class="text-small">Опрос создан: {{ pool.date_created }}, Опрошено: 0</span><br><br>
+                <span class="text-small">Опрос создан: {{ pool.date_created }}, Вопросов: {{ pool.question_set.count }}</span><br><br>
                 <div class="btn-toolbar" role="toolbar">
                     <a href="{% url 'pool_edit' uuid=pool.uuid %}"
                        class="btn btn-secondary mr-1 mb-1">Редактировать</a>
-                    <a href="{% url 'pool_view' uuid=pool.uuid %}" class="btn btn-secondary mr-1 mb-1">Просмотр</a>
+                    <a href="{% url 'pool_view' uuid=pool.uuid %}" class="btn btn-secondary mr-1 mb-1">Пройти опрос</a>
+                    <a href="{% url 'pool_stat' uuid=pool.uuid %}" class="btn btn-secondary mr-1 mb-1">Результаты</a>
                     <div class="input-group mr-1 mb-1">
                         <input type="text" class="form-control"
                                value="https://опрослегко.рф{% url 'pool_view' uuid=pool.uuid %}">

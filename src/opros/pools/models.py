@@ -88,6 +88,9 @@ class Question(models.Model):
     def __str__(self):
         return '<Question %s>' % self.uuid
 
+    def total_count(self):
+        return self.useranswer_set.all().count()
+
     class Meta:
         ordering = ('pool', 'date_created',)
         verbose_name = u'Вопрос'
@@ -125,7 +128,48 @@ class Answer(models.Model):
     def __str__(self):
         return '<Answer %s>' % self.uuid
 
+    def ua_count(self):
+        return self.useranswer_set.all().count()
+
+    def ua_persent(self):
+        return int(self.ua_count() * 100 / self.question.total_count())
+
     class Meta:
         ordering = ('question', 'date_created',)
         verbose_name = u'Ответ'
         verbose_name_plural = u'Ответы'
+
+
+class UserAnswer(models.Model):
+    question = models.ForeignKey(Question, default='', on_delete=models.DO_NOTHING)
+    answer = models.ForeignKey(Answer, default='', on_delete=models.DO_NOTHING)
+    uuid = models.UUIDField(
+        u'Уникальный ключ',
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    useragent = models.CharField(
+        u'Агент',
+        default='',
+        blank=True,
+        max_length=250
+    )
+    ipaddress = models.CharField(
+        u'Адрес',
+        default='',
+        blank=True,
+        max_length=16
+    )
+    date_created = models.DateTimeField(
+        u'Дата добавления ответа',
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return '<UserAnswer %s>' % self.uuid
+
+    class Meta:
+        ordering = ('date_created',)
+        verbose_name = u'Ответ пользователя'
+        verbose_name_plural = u'Ответы пользователей'

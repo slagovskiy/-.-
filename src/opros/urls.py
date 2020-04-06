@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import include, path
 from django.contrib import admin
 from django.views.generic.base import TemplateView
-from .views import profile, pool_edit, pool_view
+from .views import profile, pool_edit, pool_view, pool_stat
 
 
 admin.autodiscover()
@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^accounts/profile/$', profile, name='account_profile'),
     url(r'^pool/(?P<uuid>[-\w]+)/edit/$', pool_edit, name='pool_edit'),
     url(r'^pool/(?P<uuid>[-\w]+)/view/$', pool_view, name='pool_view'),
+    url(r'^pool/(?P<uuid>[-\w]+)/stat/$', pool_stat, name='pool_stat'),
     path('admin/', admin.site.urls),
 ]
